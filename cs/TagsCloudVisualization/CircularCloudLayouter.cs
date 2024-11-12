@@ -16,7 +16,14 @@ public class CircularCloudLayouter : ICircularCloudLayouter
     public Rectangle PutNextRectangle(Size rectangleSize)
     {
         if (addedRectangles.Count == 0)
-            return new Rectangle(center, rectangleSize);
+        {
+            var rectangleStartPoint =
+                new Point(center.X - rectangleSize.Width / 2, center.Y - rectangleSize.Height / 2);
+            var firstRectangle = new Rectangle(rectangleStartPoint, rectangleSize);
+            addedRectangles.Add(firstRectangle);
+            return firstRectangle;
+        }
+        
 
         return new Rectangle(new Point(center.X + 1, center.Y + 2), rectangleSize);
     }

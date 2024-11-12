@@ -18,7 +18,8 @@ public class CircularCloudLayouterTests
         var rectangleSize = new Size(rectangleWidth, rectangleHeight);
 
         var addedRectangle = c.PutNextRectangle(rectangleSize);
+        var expectedRectangleStartPoint = new Point(centerX - rectangleWidth / 2, centerY - rectangleHeight / 2);
 
-        addedRectangle.Location.Should().BeEquivalentTo(center);
+        addedRectangle.Location.Should().BeEquivalentTo(expectedRectangleStartPoint);
     }
 }
