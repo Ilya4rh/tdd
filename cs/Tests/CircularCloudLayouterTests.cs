@@ -1,6 +1,7 @@
 ﻿using System.Drawing;
 using FluentAssertions;
 using NUnit.Framework;
+using NUnit.Framework.Interfaces;
 using TagsCloudVisualization;
 
 namespace Tests;
@@ -9,11 +10,34 @@ namespace Tests;
 public class CircularCloudLayouterTests
 {
     private ICircularCloudLayouter cloudLayouter;
+    private List<Rectangle> addedRectangles;
     
     [SetUp]
     public void Setup()
     {
         cloudLayouter = new CircularCloudLayouter(new Point(0, 0));
+        addedRectangles = [];
+    }
+
+    [TearDown]
+    public void TearDown()
+    {
+        if (TestContext.CurrentContext.Result.Outcome.Status != TestStatus.Failed) 
+            return;
+        
+        var pathImageStored = TestContext.CurrentContext.TestDirectory + @"\imageFailedTests";
+
+        if (!Directory.Exists(pathImageStored))
+        {
+            Directory.CreateDirectory(pathImageStored);
+        }
+
+        var testName = TestContext.CurrentContext.Test.Name;
+        
+        VisualizationCircularCloudLayout.DrawAndSaveLayout(addedRectangles, $"{testName}.png",
+            pathImageStored);
+            
+        Console.WriteLine($@"Tag cloud visualization saved to file {pathImageStored}\{testName}.png");
     }
     
     [Test]
@@ -34,7 +58,6 @@ public class CircularCloudLayouterTests
         int maxSideLength)
     {
         var rectangleSizes = GetGeneratedRectangleSizes(countRectangles, minSideLength, maxSideLength);
-        var addedRectangles = new List<Rectangle>();
         
         addedRectangles.AddRange(rectangleSizes.Select(t => cloudLayouter.PutNextRectangle(t)));
 
@@ -55,7 +78,6 @@ public class CircularCloudLayouterTests
         int maxSideLength)
     {
         var rectangleSizes = GetGeneratedRectangleSizes(countRectangles, minSideLength, maxSideLength);
-        var addedRectangles = new List<Rectangle>();
         
         addedRectangles.AddRange(rectangleSizes.Select(t => cloudLayouter.PutNextRectangle(t)));
 
