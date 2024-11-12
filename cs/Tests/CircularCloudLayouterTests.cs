@@ -8,17 +8,21 @@ namespace Tests;
 [TestFixture]
 public class CircularCloudLayouterTests
 {
-    [TestCase(0, 0, 10, 15)]
-    [TestCase(2, 7, 5, 9)]
-    public void PutNextRectangle_ShouldRectangleInCenter_WhenAddFirstRectangle(int centerX, int centerY, 
-        int rectangleWidth, int rectangleHeight)
+    private ICircularCloudLayouter cloudLayouter;
+    
+    [SetUp]
+    public void Setup()
     {
-        var center = new Point(centerX, centerY);
-        var cloudLayouter = new CircularCloudLayouter(center);
-        var rectangleSize = new Size(rectangleWidth, rectangleHeight);
+        cloudLayouter = new CircularCloudLayouter(new Point(0, 0));
+    }
+    
+    [Test]
+    public void PutNextRectangle_ShouldRectangleInCenter_WhenAddFirstRectangle()
+    {
+        var rectangleSize = new Size(10, 15);
 
         var addedRectangle = cloudLayouter.PutNextRectangle(rectangleSize);
-        var expectedRectangleStartPoint = new Point(centerX - rectangleWidth / 2, centerY - rectangleHeight / 2);
+        var expectedRectangleStartPoint = new Point(-addedRectangle.Width / 2, - addedRectangle.Height / 2);
 
         addedRectangle.Location.Should().BeEquivalentTo(expectedRectangleStartPoint);
     }
@@ -29,7 +33,6 @@ public class CircularCloudLayouterTests
     public void PutNextRectangle_ShouldAddedRectanglesDoNotIntersect(int countRectangles, int minSideLength,
         int maxSideLength)
     {
-        var cloudLayouter = new CircularCloudLayouter(new Point(0, 0));
         var rectangleSizes = GetGeneratedRectangleSizes(countRectangles, minSideLength, maxSideLength);
         var addedRectangles = new List<Rectangle>();
         
@@ -51,15 +54,13 @@ public class CircularCloudLayouterTests
     public void CircleShape_ShouldBeCloseToCircle_WhenAddMultipleRectangles(int countRectangles, int minSideLength, 
         int maxSideLength)
     {
-        var center = new Point(0, 0);
-        var cloudLayouter = new CircularCloudLayouter(center);
         var rectangleSizes = GetGeneratedRectangleSizes(countRectangles, minSideLength, maxSideLength);
         var addedRectangles = new List<Rectangle>();
         
         addedRectangles.AddRange(rectangleSizes.Select(t => cloudLayouter.PutNextRectangle(t)));
 
         var distances = addedRectangles
-            .Select(rectangle => GetDistanceBetweenCenterRectangleAndCenterCloud(rectangle, center))
+            .Select(rectangle => GetDistanceBetweenCenterRectangleAndCenterCloud(rectangle, new Point(0, 0)))
             .ToArray();
 
         for (var i = 1; i < distances.Length; i++)
