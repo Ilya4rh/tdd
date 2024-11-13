@@ -18,7 +18,7 @@ public class VisualizationCircularCloudLayout
 
         var random = new Random();
         
-        using var bitmap = new Bitmap(width, height);
+        var bitmap = new Bitmap(width, height);
         using var graphics = Graphics.FromImage(bitmap);
         
         graphics.Clear(Color.White);
@@ -29,7 +29,7 @@ public class VisualizationCircularCloudLayout
             
             var randomColor = Color.FromArgb(random.Next(256), random.Next(256), random.Next(256));
             
-            using var brush = new SolidBrush(randomColor);
+            var brush = new SolidBrush(randomColor);
             graphics.FillRectangle(brush, shiftedRectangle);
             graphics.DrawRectangle(Pens.Black, shiftedRectangle);
         }
