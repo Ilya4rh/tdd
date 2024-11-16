@@ -3,6 +3,7 @@ using FluentAssertions;
 using NUnit.Framework;
 using NUnit.Framework.Interfaces;
 using TagsCloudVisualization;
+using TagsCloudVisualization.LayoutRectanglesAlgorithms;
 
 namespace Tests;
 
@@ -15,7 +16,8 @@ public class CircularCloudLayouterTests
     [SetUp]
     public void Setup()
     {
-        cloudLayouter = new CircularCloudLayouter(new Point(0, 0));
+        var circularLayoutAlgorithm = new CircularLayoutRectanglesAlgorithm();
+        cloudLayouter = new CircularCloudLayouter(new Point(0, 0), circularLayoutAlgorithm);
         addedRectangles = [];
     }
 
