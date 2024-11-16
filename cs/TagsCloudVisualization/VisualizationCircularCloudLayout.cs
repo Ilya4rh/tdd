@@ -6,15 +6,14 @@ namespace TagsCloudVisualization;
 
 public class VisualizationCircularCloudLayout
 {
-    public static void DrawAndSaveLayout(List<Rectangle> rectangles, string fileName, string filePath)
+    public static Bitmap DrawLayout(List<Rectangle> rectangles, int paddingFromBorders)
     {
-        const int padding = 10;
         var minX = rectangles.Min(rectangle => rectangle.Left);
         var minY = rectangles.Min(rectangle => rectangle.Top);
         var maxX = rectangles.Max(rectangle => rectangle.Right);
         var maxY = rectangles.Max(rectangle => rectangle.Bottom);
-        var width = maxX - minX + padding * 2;
-        var height = maxY - minY + padding * 2;
+        var width = maxX - minX + paddingFromBorders;
+        var height = maxY - minY + paddingFromBorders;
 
         var random = new Random();
         
@@ -25,7 +24,11 @@ public class VisualizationCircularCloudLayout
         
         foreach (var rectangle in rectangles)
         {
-            var shiftedRectangle = rectangle with { X = rectangle.X - minX + padding, Y = rectangle.Y - minY + padding };
+            var shiftedRectangle = rectangle with
+            {
+                X = rectangle.X - minX + paddingFromBorders, 
+                Y = rectangle.Y - minY + paddingFromBorders
+            };
             
             var randomColor = Color.FromArgb(random.Next(256), random.Next(256), random.Next(256));
             
@@ -33,7 +36,12 @@ public class VisualizationCircularCloudLayout
             graphics.FillRectangle(brush, shiftedRectangle);
             graphics.DrawRectangle(Pens.Black, shiftedRectangle);
         }
-        
-        bitmap.Save(Path.Combine(filePath, fileName), ImageFormat.Png);
+
+        return bitmap;
+    }
+
+    public static void SaveLayout(Bitmap bitmap, string filePath, string fileName, ImageFormat imageFormat)
+    {
+        bitmap.Save(Path.Combine(filePath, fileName), imageFormat);
     }
 }

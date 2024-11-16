@@ -1,4 +1,5 @@
 ﻿using System.Drawing;
+using System.Drawing.Imaging;
 using FluentAssertions;
 using NUnit.Framework;
 using NUnit.Framework.Interfaces;
@@ -35,9 +36,10 @@ public class CircularLayoutRectanglesAlgorithmTests
 
         var testName = TestContext.CurrentContext.Test.Name;
         
-        VisualizationCircularCloudLayout.DrawAndSaveLayout(addedRectangles, $"{testName}.png",
-            pathImageStored);
+        var bitmap = VisualizationCircularCloudLayout.DrawLayout(addedRectangles, 10);
             
+        VisualizationCircularCloudLayout.SaveLayout(bitmap, pathImageStored, $"{testName}.png", ImageFormat.Png);
+        
         Console.WriteLine($@"Tag cloud visualization saved to file {pathImageStored}\{testName}.png");
     }
     
