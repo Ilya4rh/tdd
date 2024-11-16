@@ -5,10 +5,10 @@ using NUnit.Framework.Interfaces;
 using TagsCloudVisualization;
 using TagsCloudVisualization.LayoutRectanglesAlgorithms;
 
-namespace Tests;
+namespace CircularCloudLayouterTests;
 
 [TestFixture]
-public class CircularCloudLayouterTests
+public class CircularLayoutRectanglesAlgorithmTests
 {
     private ICircularCloudLayouter cloudLayouter;
     private List<Rectangle> addedRectangles;
@@ -16,8 +16,7 @@ public class CircularCloudLayouterTests
     [SetUp]
     public void Setup()
     {
-        var circularLayoutAlgorithm = new CircularLayoutRectanglesAlgorithm();
-        cloudLayouter = new CircularCloudLayouter(new Point(0, 0), circularLayoutAlgorithm);
+        cloudLayouter = new CircularCloudLayouter(new Point(0, 0), new CircularLayoutRectanglesAlgorithm());
         addedRectangles = [];
     }
 
@@ -59,7 +58,7 @@ public class CircularCloudLayouterTests
     public void PutNextRectangle_ShouldAddedRectanglesDoNotIntersect(int countRectangles, int minSideLength,
         int maxSideLength)
     {
-        var rectangleSizes = GetGeneratedRectangleSizes(countRectangles, minSideLength, maxSideLength);
+        var rectangleSizes = GenerateRectangleSizes(countRectangles, minSideLength, maxSideLength);
         
         addedRectangles.AddRange(rectangleSizes.Select(t => cloudLayouter.PutNextRectangle(t)));
 
@@ -79,54 +78,52 @@ public class CircularCloudLayouterTests
     public void CircleShape_ShouldBeCloseToCircle_WhenAddMultipleRectangles(int countRectangles, int minSideLength, 
         int maxSideLength)
     {
-        var rectangleSizes = GetGeneratedRectangleSizes(countRectangles, minSideLength, maxSideLength);
+        var rectangleSizes = GenerateRectangleSizes(countRectangles, minSideLength, maxSideLength);
         
         addedRectangles.AddRange(rectangleSizes.Select(t => cloudLayouter.PutNextRectangle(t)));
 
         var distances = addedRectangles
-            .Select(rectangle => GetDistanceBetweenCenterRectangleAndCenterCloud(rectangle, new Point(0, 0)))
+            .Select(rectangle => CalculateDistanceBetweenCenterRectangleAndCenterCloud(rectangle, new Point(0, 0)))
             .ToArray();
 
         for (var i = 1; i < distances.Length; i++)
         {
-            var distanceBetweenRectangles = GetDistanceBetweenRectangles(addedRectangles[i], addedRectangles[i - 1]);
+            var distanceBetweenRectangles = CalculateDistanceBetweenRectangles(addedRectangles[i], addedRectangles[i - 1]);
             distances[i].Should().BeApproximately(distances[i - 1], distanceBetweenRectangles);
         }
     }
     
 
-    private static List<Size> GetGeneratedRectangleSizes(int countRectangles, int minSideLength, int maxSideLength)
+    private static List<Size> GenerateRectangleSizes(int countRectangles, int minSideLength, int maxSideLength)
     {
-        var generatedSizes = new List<Size>();
         var random = new Random();
-        
-        for (var i = 0; i < countRectangles; i++)
-        {
-            var rectangleSize = new Size(random.Next(minSideLength, maxSideLength),
-                random.Next(minSideLength, maxSideLength));
-            
-            generatedSizes.Add(rectangleSize);
-        }
+
+        var generatedSizes = Enumerable.Range(0, countRectangles)
+            .Select(_ => new Size(
+                random.Next(minSideLength, maxSideLength), 
+                random.Next(minSideLength, maxSideLength))
+            )
+            .ToList();
 
         return generatedSizes;
     }
 
-    private static double GetDistanceBetweenCenterRectangleAndCenterCloud(Rectangle rectangle, Point center)
+    private static double CalculateDistanceBetweenCenterRectangleAndCenterCloud(Rectangle rectangle, Point center)
     {
         var centerRectangle = new Point(rectangle.X + rectangle.Width / 2, rectangle.Y + rectangle.Height / 2);
         
-        return GetDistanceBetweenPoints(centerRectangle, center);
+        return CalculateDistanceBetweenPoints(centerRectangle, center);
     }
 
-    private static double GetDistanceBetweenRectangles(Rectangle rectangle1, Rectangle rectangle2)
+    private static double CalculateDistanceBetweenRectangles(Rectangle rectangle1, Rectangle rectangle2)
     {
         var centerRectangle1 = new Point(rectangle1.X + rectangle1.Width / 2, rectangle1.Y + rectangle1.Height / 2);
         var centerRectangle2 = new Point(rectangle2.X + rectangle2.Width / 2, rectangle2.Y + rectangle2.Height / 2);
 
-        return GetDistanceBetweenPoints(centerRectangle1, centerRectangle2);
+        return CalculateDistanceBetweenPoints(centerRectangle1, centerRectangle2);
     }
 
-    private static double GetDistanceBetweenPoints(Point point1, Point point2)
+    private static double CalculateDistanceBetweenPoints(Point point1, Point point2)
     {
         return Math.Sqrt(Math.Pow(point1.X - point2.X, 2) + Math.Pow(point1.Y - point2.Y, 2));
     }
