@@ -1,8 +1,8 @@
 ﻿using System.Drawing;
 
-namespace TagsCloudVisualization.LayoutRectanglesAlgorithms;
+namespace TagsCloudVisualization.LayoutRectanglesInCloudAlgorithms;
 
-public class CircularLayoutRectanglesAlgorithm : ILayoutRectanglesAlgorithm
+public class CircularLayoutRectanglesInCloudAlgorithm : ILayoutRectanglesInCloudAlgorithm
 {
     private readonly List<Rectangle> addedRectangles = [];
     private double currentAngleOfCircle;
