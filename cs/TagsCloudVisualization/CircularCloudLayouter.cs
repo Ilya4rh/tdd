@@ -22,11 +22,10 @@ public class CircularCloudLayouter : ICircularCloudLayouter
         do
         {
             var nextPoint = layoutAlgorithm.CalculateNextPoint();
+
+            var rectangleLocation = nextPoint - rectangleSize / 2;
             
-            var x = center.X + nextPoint.X - rectangleSize.Width / 2;
-            var y = center.Y + nextPoint.Y - rectangleSize.Height / 2;
-            
-            rectangle = new Rectangle(new Point(x, y), rectangleSize);
+            rectangle = new Rectangle(rectangleLocation, rectangleSize);
 
         } while (IntersectWithAddedRectangles(rectangle));
         
