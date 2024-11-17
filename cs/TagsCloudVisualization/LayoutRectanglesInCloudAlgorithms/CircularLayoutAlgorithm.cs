@@ -4,6 +4,7 @@ namespace TagsCloudVisualization.LayoutRectanglesInCloudAlgorithms;
 
 public class CircularLayoutAlgorithm : ILayoutAlgorithm
 {
+    private readonly Point center;
     private readonly double stepIncreasingAngle;
     private readonly double stepIncreasingRadius;
     private double currentAngleOfCircle;
@@ -11,13 +12,14 @@ public class CircularLayoutAlgorithm : ILayoutAlgorithm
     private const double OneDegree = Math.PI / 180;
     private const double FullCircleRotation = 2 * Math.PI;
 
-    public CircularLayoutAlgorithm(double stepIncreasingAngle = OneDegree, double stepIncreasingRadius = 1)
+    public CircularLayoutAlgorithm(Point center, double stepIncreasingAngle = OneDegree, double stepIncreasingRadius = 1)
     {
-        if (stepIncreasingAngle <= 0)
-            throw new ArgumentException("The parameter 'stepIncreasingAngle' is less than or equal to zero");
-        if (stepIncreasingRadius == 0)
-            throw new ArgumentException("The parameter 'stepIncreasingRadius' is zero");
-        
+        if (stepIncreasingRadius <= 0)
+            throw new ArgumentException("The parameter 'stepIncreasingRadius' is less than or equal to zero");
+        if (stepIncreasingAngle == 0)
+            throw new ArgumentException("The parameter 'stepIncreasingAngle' is zero");
+
+        this.center = center;
         this.stepIncreasingAngle = stepIncreasingAngle;
         this.stepIncreasingRadius = stepIncreasingRadius;
     }
@@ -29,8 +31,8 @@ public class CircularLayoutAlgorithm : ILayoutAlgorithm
         
         currentAngleOfCircle += stepIncreasingAngle; 
             
-        // проверяем не прошли ли целый круг
-        if (currentAngleOfCircle > FullCircleRotation)
+        // проверяем не прошли ли целый круг или равен ли текущий радиус нулю
+        if (currentAngleOfCircle > FullCircleRotation || currentRadiusOfCircle == 0)
         {
             currentAngleOfCircle = 0;
             currentRadiusOfCircle += stepIncreasingRadius;
