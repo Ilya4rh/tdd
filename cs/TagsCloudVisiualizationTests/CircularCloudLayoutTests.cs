@@ -6,6 +6,7 @@ using NUnit.Framework.Interfaces;
 using TagsCloudVisiualizationTests.Utils;
 using TagsCloudVisualization;
 using TagsCloudVisualization.LayoutRectanglesInCloudAlgorithms;
+using TagsCloudVisualization.Visualization;
 
 namespace TagsCloudVisiualizationTests;
 
@@ -38,9 +39,9 @@ public class CircularCloudLayoutTests
 
         var testName = TestContext.CurrentContext.Test.Name;
         
-        var bitmap = VisualizationCircularCloudLayout.DrawLayout(addedRectangles, 10);
+        var bitmap = ImageDrawer.DrawLayout(addedRectangles, 10);
             
-        VisualizationCircularCloudLayout.SaveLayout(bitmap, pathImageStored, $"{testName}.png", ImageFormat.Png);
+        ImageSaver.Save(bitmap, pathImageStored, $"{testName}.png", ImageFormat.Png);
         
         Console.WriteLine($@"Tag cloud visualization saved to file {pathImageStored}\{testName}.png");
     }
