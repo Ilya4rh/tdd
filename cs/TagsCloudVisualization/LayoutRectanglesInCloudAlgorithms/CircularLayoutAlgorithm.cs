@@ -15,8 +15,8 @@ public class CircularLayoutAlgorithm : ILayoutAlgorithm
     {
         if (stepIncreasingAngle <= 0)
             throw new ArgumentException("The parameter 'stepIncreasingAngle' is less than or equal to zero");
-        if (stepIncreasingRadius <= 0)
-            throw new ArgumentException("The parameter 'stepIncreasingRadius' is less than or equal to zero");
+        if (stepIncreasingRadius == 0)
+            throw new ArgumentException("The parameter 'stepIncreasingRadius' is zero");
         
         this.stepIncreasingAngle = stepIncreasingAngle;
         this.stepIncreasingRadius = stepIncreasingRadius;
