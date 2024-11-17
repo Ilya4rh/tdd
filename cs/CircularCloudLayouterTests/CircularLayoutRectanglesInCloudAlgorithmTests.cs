@@ -17,7 +17,7 @@ public class CircularLayoutRectanglesInCloudAlgorithmTests
     [SetUp]
     public void Setup()
     {
-        cloudLayouter = new CircularCloudLayouter(new Point(0, 0), new CircularLayoutRectanglesInCloudAlgorithm());
+        cloudLayouter = new CircularCloudLayouter(new Point(0, 0), new CircularLayoutAlgorithm());
         addedRectangles = [];
     }
 
