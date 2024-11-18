@@ -2,6 +2,7 @@
 
 namespace TagsCloudVisualization.Visualization;
 
+#pragma warning disable CA1416
 public class ImageDrawer
 {
     public static Bitmap DrawLayout(List<Rectangle> rectangles, int paddingFromBorders)

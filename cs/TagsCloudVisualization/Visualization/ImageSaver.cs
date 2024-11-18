@@ -1,6 +1,7 @@
 ﻿using System.Drawing;
 using System.Drawing.Imaging;
 
+#pragma warning disable CA1416
 namespace TagsCloudVisualization.Visualization;
 
 public class ImageSaver
