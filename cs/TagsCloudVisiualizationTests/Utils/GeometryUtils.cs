@@ -23,4 +23,18 @@ public static class GeometryUtils
     {
         return Math.Sqrt(Math.Pow(point1.X - point2.X, 2) + Math.Pow(point1.Y - point2.Y, 2));
     }
+    
+    public static List<Size> GenerateRectangleSizes(int countRectangles, int minSideLength, int maxSideLength)
+    {
+        var random = new Random();
+
+        var generatedSizes = Enumerable.Range(0, countRectangles)
+            .Select(_ => new Size(
+                random.Next(minSideLength, maxSideLength), 
+                random.Next(minSideLength, maxSideLength))
+            )
+            .ToList();
+
+        return generatedSizes;
+    }
 }

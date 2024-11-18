@@ -20,7 +20,7 @@ public class CircularCloudLayoutTests
     public void Setup()
     {
         var center = new Point(0, 0);
-        cloudLayouter = new CircularCloudLayouter(center, new CircularLayoutAlgorithm(center));
+        cloudLayouter = new CircularCloudLayouter(new CircularLayoutAlgorithm(center));
         addedRectangles = [];
     }
 
@@ -52,7 +52,7 @@ public class CircularCloudLayoutTests
     public void PutNextRectangle_ShouldAddedRectanglesDoNotIntersect(int countRectangles, int minSideLength,
         int maxSideLength)
     {
-        var rectangleSizes = GenerateRectangleSizes(countRectangles, minSideLength, maxSideLength);
+        var rectangleSizes = GeometryUtils.GenerateRectangleSizes(countRectangles, minSideLength, maxSideLength);
         
         addedRectangles.AddRange(rectangleSizes.Select(t => cloudLayouter.PutNextRectangle(t)));
 
@@ -72,7 +72,7 @@ public class CircularCloudLayoutTests
     public void CircleShape_ShouldBeCloseToCircle_WhenAddMultipleRectangles(int countRectangles, int minSideLength, 
         int maxSideLength)
     {
-        var rectangleSizes = GenerateRectangleSizes(countRectangles, minSideLength, maxSideLength);
+        var rectangleSizes = GeometryUtils.GenerateRectangleSizes(countRectangles, minSideLength, maxSideLength);
         
         addedRectangles.AddRange(rectangleSizes.Select(t => cloudLayouter.PutNextRectangle(t)));
 
@@ -87,20 +87,5 @@ public class CircularCloudLayoutTests
                 GeometryUtils.CalculateDistanceBetweenRectangles(addedRectangles[i], addedRectangles[i - 1]);
             distances[i].Should().BeApproximately(distances[i - 1], distanceBetweenRectangles);
         }
-    }
-    
-
-    private static List<Size> GenerateRectangleSizes(int countRectangles, int minSideLength, int maxSideLength)
-    {
-        var random = new Random();
-
-        var generatedSizes = Enumerable.Range(0, countRectangles)
-            .Select(_ => new Size(
-                random.Next(minSideLength, maxSideLength), 
-                random.Next(minSideLength, maxSideLength))
-            )
-            .ToList();
-
-        return generatedSizes;
     }
 }

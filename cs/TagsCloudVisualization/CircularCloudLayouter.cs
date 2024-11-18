@@ -5,13 +5,11 @@ namespace TagsCloudVisualization;
 
 public class CircularCloudLayouter : ICircularCloudLayouter
 {
-    private readonly Point center;
     private readonly ILayoutAlgorithm layoutAlgorithm;
     private readonly List<Rectangle> addedRectangles = [];
     
-    public CircularCloudLayouter(Point center, ILayoutAlgorithm layoutAlgorithm)
+    public CircularCloudLayouter(ILayoutAlgorithm layoutAlgorithm)
     {
-        this.center = center;
         this.layoutAlgorithm = layoutAlgorithm;
     }
 
