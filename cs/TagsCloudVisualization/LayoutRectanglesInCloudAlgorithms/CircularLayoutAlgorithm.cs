@@ -6,13 +6,13 @@ public class CircularLayoutAlgorithm : ILayoutAlgorithm
 {
     private readonly Point center;
     private readonly double stepIncreasingAngle;
-    private readonly double stepIncreasingRadius;
+    private readonly int stepIncreasingRadius;
     private double currentAngleOfCircle;
     private double currentRadiusOfCircle;
     private const double OneDegree = Math.PI / 180;
     private const double FullCircleRotation = 2 * Math.PI;
 
-    public CircularLayoutAlgorithm(Point center, double stepIncreasingAngle = OneDegree, double stepIncreasingRadius = 1)
+    public CircularLayoutAlgorithm(Point center, double stepIncreasingAngle = OneDegree, int stepIncreasingRadius = 1)
     {
         if (stepIncreasingRadius <= 0)
             throw new ArgumentException("The parameter 'stepIncreasingRadius' is less than or equal to zero");
@@ -26,8 +26,8 @@ public class CircularLayoutAlgorithm : ILayoutAlgorithm
     
     public Point CalculateNextPoint()
     {
-        var x = (int)(currentRadiusOfCircle * Math.Cos(currentAngleOfCircle));
-        var y = (int)(currentRadiusOfCircle * Math.Sin(currentAngleOfCircle));
+        var x = center.X + (int)(currentRadiusOfCircle * Math.Cos(currentAngleOfCircle));
+        var y = center.Y + (int)(currentRadiusOfCircle * Math.Sin(currentAngleOfCircle));
         
         currentAngleOfCircle += stepIncreasingAngle; 
             
